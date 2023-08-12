@@ -19,11 +19,11 @@ public class Shotgun : WeaponBase
 
     public void Reloaded()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Reload");
     }
 
     public bool GetIsReloading()
     {
-        throw new System.NotImplementedException();
+        return false;
     }
 }

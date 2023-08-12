@@ -7,6 +7,7 @@ public class Constants
     public const int THREE = 3;
     public const int TEN = 10;
     public const int ONE_HUNDRED = 100;
+    public const int THREE_THOUSAND = 3000;
     public const int ONE_HUNDRED_THOUSAND = 100000;
     
     public const float ONE_TENTH_SECOND = 0.1f;

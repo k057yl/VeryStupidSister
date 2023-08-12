@@ -150,6 +150,7 @@ public class CharController : MonoBehaviour
     
     private void Shot()
     {
+        Debug.Log("Fire");
         _currentWeapon.Fire();
     }
 }
