@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,23 +7,26 @@ using Zenject;
 public class CharController : MonoBehaviour
 {
     [SerializeField] private CharacterConfig _characterConfig;
-    
+
+    private CharacterModel _characterModel;//----------
+    public CharacterModel CharacterModel => _characterModel;//---------------
     private Rigidbody2D _rigidbody2D;
     private IInput _input;
     private CharacterView _characterView;
 
     private bool _isGrounded;
+    private UIBar _uiBar;//----------
     
     [Inject]
-    private void Construct(IInput input)
+    private void Construct(IInput input, UIBar uiBar)//-------------
     {
         _input = input;
+        _uiBar = uiBar;//-----------
     }
     
     private Vector2 _previousDirection = Vector2.zero;
     private bool _isFacingRight = false;
-    //--------
-    private IWeapon _currentWeapon;
+    
     
     private void Awake()
     {
@@ -31,10 +35,12 @@ public class CharController : MonoBehaviour
 
     private void InitializeComponents()
     {
+        _characterModel = new CharacterModel();//----------------
+        
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _characterView = GetComponent<CharacterView>();
-        //------------
-        SetWeapon(GetComponent<Pistol>());
+        
+        SetUIHealth();
     }
     
     private void FixedUpdate()
@@ -46,6 +52,11 @@ public class CharController : MonoBehaviour
     {
         HandleInput();
         CharacterFlip();
+    }
+
+    private void SetUIHealth()//------------------
+    {
+        _uiBar.UpdateHealthText(CharacterModel.Health);
     }
     
     private void Move()
@@ -82,21 +93,6 @@ public class CharController : MonoBehaviour
         {
             Jump();
         }
-
-        if (_input.IsFireTriggered())
-        {
-            Shot();
-        }
-//-----------
-        if (_input.IsSlotOneTriggered())
-        {
-            SetPistol();
-        }
-
-        if (_input.IsSlotTwoTriggered())
-        {
-            SetShotgun();
-        }
     }
     
     private void Jump()
@@ -130,28 +126,14 @@ public class CharController : MonoBehaviour
         }
         _previousDirection = direction;
     }
-    //------------
-    private void SetWeapon(IWeapon weapon)
+//------------------
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        _currentWeapon = weapon;
-    }
-    
-    private void SetPistol()
-    {
-        Debug.Log("Get Pistol");
-        SetWeapon(GetComponent<Pistol>());
-    }
-
-    private void SetShotgun()
-    {
-        Debug.Log("Get Shotgun");
-        SetWeapon(GetComponent<Shotgun>());
-    }
-    
-    private void Shot()
-    {
-        Debug.Log("Fire");
-        _currentWeapon.Fire();
+        if (col.gameObject.CompareTag(Constants.ENEMY))
+        {
+            CharacterModel.TakeDamage(Constants.TEN);
+            SetUIHealth();
+        }
     }
 }
 /*

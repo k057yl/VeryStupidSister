@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterConfig: {fileID: 11400000, guid: 900e19c6f8f9b994897def1c8ff26859, type: 2}
+  _bulletSpawnPoint: {fileID: 3705887037508435741}
 --- !u!50 &6236668570135676695
 Rigidbody2D:
   serializedVersion: 4
